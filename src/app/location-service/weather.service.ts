@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class WeatherService {
   baseUrl = 'http://localhost/weatherapi/api/5-day-forecast/';
+  
 
   constructor(private http: HttpClient) {}
 
