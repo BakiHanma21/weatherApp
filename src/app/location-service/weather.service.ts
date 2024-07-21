@@ -12,8 +12,8 @@ export class WeatherService {
 
   constructor(private http: HttpClient) {}
 
-  getCurrentWeather(location: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}current-weather/${location}`, "");
+  getCurrentWeather(location: any): Observable<any> {
+    return this.http.post(this.baseUrl+"current-weather/"+location, "");
   }
 
   getCurrentWeatherByCoordinates(lat: any, lon: any): Observable<any> {
@@ -21,10 +21,10 @@ export class WeatherService {
   }
 
   get5DayForecast(location: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${location}`, "");
+    return this.http.post(`${this.baseUrl}5-day-forecast/${location}`, "");
   }
 
-  get5DayForecastByCoordinates(lat: string, lon: string): Observable<any> {
-    return this.http.post(this.baseUrl+"current-weather/"+lat+"/"+lon, "");
+  get5DayForecastByCoordinates(location:any , data :any) : Observable<any> {
+    return this.http.post(`${this.baseUrl}current-weather/${location}`, "");
   }
 }

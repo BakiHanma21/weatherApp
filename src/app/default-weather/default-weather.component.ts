@@ -99,7 +99,7 @@ export class DefaultWeatherComponent implements OnInit {
       }
     );
 
-    this.weatherService.get5DayForecastByCoordinates(lat, lon).subscribe(
+    this.weatherService.get5DayForecastByCoordinates(this.userLocation, 'sadas').subscribe(
       (data: any) => {
         console.log('Full forecast weather response by coordinates:', data);
         this.forecastWeather = data?.list?.filter((entry: any) => entry.dt_txt.includes('12:00:00')).map((entry: any) => ({

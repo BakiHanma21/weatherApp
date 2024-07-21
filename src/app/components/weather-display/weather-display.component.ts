@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WeatherService } from '../../location-service/weather.service';
 import { WeatherUtilsService } from '../../location-service/weather-utils.service';
@@ -8,7 +8,7 @@ import { WeatherUtilsService } from '../../location-service/weather-utils.servic
   templateUrl: './weather-display.component.html',
   styleUrls: ['./weather-display.component.scss']
 })
-export class WeatherDisplayComponent implements OnChanges {
+export class WeatherDisplayComponent implements  OnChanges {
   @Input() location: string = '';
   @Input() unit: string = 'C';
   currentWeather: any = null;
@@ -21,15 +21,14 @@ export class WeatherDisplayComponent implements OnChanges {
   userLocation: string | null = null;
 
   validCities: string[] = ['Olongapo', 'Subic', 'Chicago', 'Manila', 'Pasay', 'Davao', 'Pampanga', 'Japan', 'Tokyo', 'London', 'China', 'Korea', 'USA'];
-  weatherService = inject(WeatherService);
+
   constructor(
+    private http: HttpClient,
+    private weatherService: WeatherService,
     private weatherUtils: WeatherUtilsService
   ) {}
 
-  ngOnInit() {
-    // this.fetchDefaultWeatherData();
-    // this.promptLocationPermission();
-  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['location'] && this.location) {
@@ -42,51 +41,56 @@ export class WeatherDisplayComponent implements OnChanges {
     this.errorMessage = '';
 
     if (!this.isValidCityName(this.location)) {
-      this.errorMessage = 'That is not a city name. Please enter a valid city name.';
-      this.currentWeather = null;
-      this.forecastWeather = [];
-      this.displayedLocation = this.defaultLocation;
-    } else {
-      const encodedLocation = encodeURIComponent(this.location);
-      console.log(`Fetching data for location: ${encodedLocation}, unit: ${this.unit}`);
+        this.errorMessage = 'That is not a city name. Please enter a valid city name.';
+        this.currentWeather = null;
+        this.forecastWeather = [];
+        this.displayedLocation = this.defaultLocation;
+        return;
+    }
 
-      this.weatherService.getCurrentWeather(encodedLocation).subscribe(
+    const encodedLocation = encodeURIComponent(this.location);
+    console.log(`Fetching data for location: ${encodedLocation}, unit: ${this.unit}`);
+
+    this.weatherService.getCurrentWeather(encodedLocation).subscribe(
         (data: any) => {
-          console.log('Current weather data received:', data);
-          this.currentWeather = {
-            ...data,
-            main: {
-              ...data.main,
-              temp: this.weatherUtils.convertTemperature(data.main.temp, this.unit)
-            }
-          };
-          this.displayedLocation = this.location; // Update displayed location if valid
-
-          // Fetch forecast weather data only after current weather is successfully fetched
-          this.weatherService.get5DayForecast(encodedLocation).subscribe(
-            (forecastData: any) => {
-              console.log('Full forecast weather response:', forecastData);
-              this.forecastWeather = forecastData?.list?.filter((entry: any) => entry.dt_txt.includes('12:00:00')).map((entry: any) => ({
-                ...entry,
+            console.log('Current weather data received:', data);
+            this.currentWeather = {
+                ...data,
                 main: {
-                  ...entry.main,
-                  temp: this.weatherUtils.convertTemperature(entry.main.temp, this.unit)
+                    ...data.main,
+                    temp: this.weatherUtils.convertTemperature(data.main.temp, this.unit)
                 }
-              })) || [];
-            },
-            (error) => {
-              this.errorMessage = `Error: ${error.message}`;
-              console.error('There was an error fetching forecast weather!', error);
-            }
-          );
+            };
+            this.displayedLocation = this.location; // Update displayed location if valid
+
+            // Fetch forecast weather data after current weather is successfully fetched
+            this.weatherService.get5DayForecast(encodedLocation).subscribe(
+
+                (forecastData: any) => {
+                    console.log('Full forecast weather response:', forecastData);
+                    this.forecastWeather = (forecastData?.list || [])
+                        .filter((entry: any) => entry.dt_txt.includes('12:00:00'))
+                        .map((entry: any) => ({
+                            ...entry,
+                            main: {
+                                ...entry.main,
+                                temp: this.weatherUtils.convertTemperature(entry.main.temp, this.unit)
+                            }
+                        }));
+                },
+                (error) => {
+                    this.errorMessage = `Error fetching forecast: ${error.message}`;
+                    console.error('Error fetching forecast weather:', error);
+                }
+            );
         },
         (error) => {
-          this.errorMessage = `Error: ${error.message}`;
-          console.error('There was an error fetching current weather!', error);
+            this.errorMessage = `Error fetching current weather: ${error.message}`;
+            console.error('Error fetching current weather:', error);
         }
-      );
-    }
-  }
+    );
+}
+
 
   fetchDefaultWeatherData() {
     const encodedDefaultLocation = encodeURIComponent(this.defaultLocation);
@@ -139,9 +143,7 @@ export class WeatherDisplayComponent implements OnChanges {
   }
 
   fetchWeatherByCoordinates(lat: number, lon: number) {
-    let latString = lat.toString()
-    let lonString = lon.toString()
-    this.weatherService.getCurrentWeatherByCoordinates(latString, lonString).subscribe(
+    this.weatherService.getCurrentWeatherByCoordinates(lat, lon).subscribe(
       (data: any) => {
         console.log('Current weather data by coordinates received:', data);
         this.currentWeather = {
@@ -159,7 +161,7 @@ export class WeatherDisplayComponent implements OnChanges {
       }
     );
 
-    this.weatherService.get5DayForecastByCoordinates(latString, lonString).subscribe(
+    this.weatherService.get5DayForecastByCoordinates(lat, lon).subscribe(
       (data: any) => {
         console.log('Full forecast weather response by coordinates:', data);
         this.forecastWeather = data?.list?.filter((entry: any) => entry.dt_txt.includes('12:00:00')).map((entry: any) => ({
