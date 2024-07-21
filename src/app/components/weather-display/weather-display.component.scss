@@ -1,0 +1,51 @@
+mat-card {
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: rgb(228, 227, 227);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.error {
+  color: rgb(229, 43, 43);
+}
+
+.weather-image {
+  max-width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.forecast-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.forecast-item {
+  flex: 1 1 calc(33.333% - 16px);
+  background: #f0f0f0;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.location-input {
+  width: 300px;
+  margin-right: 8px;
+}
+
+.temperature {
+  font-size: 2em;
+  font-weight: bold;
+}

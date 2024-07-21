@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: linear-gradient(to right, #7b4397, #dc2430);
+  color: #fff;
+}
+
+/* Style for the Angular Material toolbar */
+mat-toolbar {
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  color: #f34646; /* White text for toolbar */
+}
+
+/* General styles for card content */
+mat-card {
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  color: rgb(75, 75, 230); /* Black text for readability */
+  font-size: 16px;
+}
+
+mat-card h2, mat-card h3 {
+  color: #000; /* Ensure headers are black */
+}
+
+mat-card p {
+  color: #000; /* Ensure paragraphs are black */
+  font-size: 16px;
+}
+
+/* Additional specific styles can be added as needed */

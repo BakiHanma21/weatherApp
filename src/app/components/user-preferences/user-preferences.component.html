@@ -1,0 +1,7 @@
+<mat-card>
+  <h3>Select Temperature Unit</h3>
+  <mat-radio-group [(ngModel)]="selectedUnit" (change)="onUnitChange()">
+    <mat-radio-button value="C">Celsius</mat-radio-button>
+    <mat-radio-button value="F">Fahrenheit</mat-radio-button>
+  </mat-radio-group>
+</mat-card>

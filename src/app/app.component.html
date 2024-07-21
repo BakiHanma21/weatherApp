@@ -1,0 +1,9 @@
+<router-outlet>
+  <mat-toolbar color="primary">
+    <span>Weather Forecast App</span>
+  </mat-toolbar>
+  <div class="content">
+    <app-user-preferences (unitChange)="updateUnit($event)"></app-user-preferences>
+    <app-weather-display [location]="location" [unit]="unit"></app-weather-display>
+  </div>
+</router-outlet>
