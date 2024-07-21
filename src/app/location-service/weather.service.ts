@@ -6,24 +6,25 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class WeatherService {
-  baseUrl = 'http://localhost/weatherapi/api/5-day-forecast/';
-  
+  baseUrl = 'http://localhost:8000/routes.php?request=';
+  currentWeather= 'http://localhost/weatherapi/current-weather';
+  currentWeatherByCoordinates = 'http://localhost/weatherapi/coordinates';
 
   constructor(private http: HttpClient) {}
 
   getCurrentWeather(location: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${location}`, "");
+    return this.http.post(`${this.baseUrl}current-weather/${location}`, "");
   }
 
-  getCurrentWeatherByCoordinates(lat: number, lon: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${location}`, "");
+  getCurrentWeatherByCoordinates(lat: any, lon: any): Observable<any> {
+    return this.http.post(this.baseUrl+"current-weather/"+lat+"/"+lon, "");
   }
 
   get5DayForecast(location: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/${location}`, "");
   }
 
-  get5DayForecastByCoordinates(lat: number, lon: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${location}`, "");
+  get5DayForecastByCoordinates(lat: string, lon: string): Observable<any> {
+    return this.http.post(this.baseUrl+"current-weather/"+lat+"/"+lon, "");
   }
 }

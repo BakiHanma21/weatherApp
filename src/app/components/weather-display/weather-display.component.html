@@ -9,22 +9,9 @@
   <h2 class="error">Error!!!</h2>
   <p>{{ errorMessage }}</p>
 </mat-card>
+<app-default-weather />
 
-<mat-card *ngIf="defaultWeather">
-  <h2>Olongapo</h2>
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Clear'" src="../../../assets/sunny.png" alt="Sunny" class="weather-image">
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Clouds'" src="../../../assets/cloudy.png" alt="Cloudy" class="weather-image">
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Rain'" src="../../../assets/rainny.png" alt="Rainy" class="weather-image">
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Storm'" src="../../../assets/stormy.png" alt="Stormy" class="weather-image">
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Fog'" src="../../../assets/foggy.png" alt="Foggy" class="weather-image">
-  <img *ngIf="defaultWeather?.weather?.[0]?.main === 'Thunderstorm'" src="../../../assets/thunderstorm.png" alt="Thunderstorm" class="weather-image">
-  <p>Temperature: {{ defaultWeather?.main?.temp | number:'1.0-0' }} {{ unit }}</p>
-  <p>Weather Condition: {{ defaultWeather?.weather?.[0]?.description }}</p>
-  <p>Humidity: {{ defaultWeather?.main?.humidity }}%</p>
-  <p>Wind Speed: {{ defaultWeather?.wind?.speed }} m/s</p>
-</mat-card>
-
-<mat-card *ngIf="currentWeather && !errorMessage">
+<mat-card *ngIf="currentWeather && !errorMessage && location">
   <h2>Weather for {{ displayedLocation }}</h2>
   <img *ngIf="currentWeather?.weather?.[0]?.main === 'Clear'" src="../../../assets/sunny.png" alt="Sunny" class="weather-image">
   <img *ngIf="currentWeather?.weather?.[0]?.main === 'Clouds'" src="../../../assets/cloudy.png" alt="Cloudy" class="weather-image">

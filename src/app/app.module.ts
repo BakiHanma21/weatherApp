@@ -18,12 +18,14 @@ import { WeatherDisplayComponent } from './components/weather-display/weather-di
 import { UserPreferencesComponent } from './components/user-preferences/user-preferences.component';
 import { AppRoutingModule } from './app-routing.module';
 import { WeatherService } from './location-service/weather.service';
+import { DefaultWeatherComponent } from './default-weather/default-weather.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WeatherDisplayComponent,
     UserPreferencesComponent,
+    DefaultWeatherComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WeatherService } from '../../location-service/weather.service';
 import { WeatherUtilsService } from '../../location-service/weather-utils.service';
@@ -8,7 +8,7 @@ import { WeatherUtilsService } from '../../location-service/weather-utils.servic
   templateUrl: './weather-display.component.html',
   styleUrls: ['./weather-display.component.scss']
 })
-export class WeatherDisplayComponent implements OnInit, OnChanges {
+export class WeatherDisplayComponent implements OnChanges {
   @Input() location: string = '';
   @Input() unit: string = 'C';
   currentWeather: any = null;
@@ -21,16 +21,14 @@ export class WeatherDisplayComponent implements OnInit, OnChanges {
   userLocation: string | null = null;
 
   validCities: string[] = ['Olongapo', 'Subic', 'Chicago', 'Manila', 'Pasay', 'Davao', 'Pampanga', 'Japan', 'Tokyo', 'London', 'China', 'Korea', 'USA'];
-
+  weatherService = inject(WeatherService);
   constructor(
-    private http: HttpClient,
-    private weatherService: WeatherService,
     private weatherUtils: WeatherUtilsService
   ) {}
 
   ngOnInit() {
-    this.fetchDefaultWeatherData();
-    this.promptLocationPermission();
+    // this.fetchDefaultWeatherData();
+    // this.promptLocationPermission();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -141,7 +139,9 @@ export class WeatherDisplayComponent implements OnInit, OnChanges {
   }
 
   fetchWeatherByCoordinates(lat: number, lon: number) {
-    this.weatherService.getCurrentWeatherByCoordinates(lat, lon).subscribe(
+    let latString = lat.toString()
+    let lonString = lon.toString()
+    this.weatherService.getCurrentWeatherByCoordinates(latString, lonString).subscribe(
       (data: any) => {
         console.log('Current weather data by coordinates received:', data);
         this.currentWeather = {
@@ -159,7 +159,7 @@ export class WeatherDisplayComponent implements OnInit, OnChanges {
       }
     );
 
-    this.weatherService.get5DayForecastByCoordinates(lat, lon).subscribe(
+    this.weatherService.get5DayForecastByCoordinates(latString, lonString).subscribe(
       (data: any) => {
         console.log('Full forecast weather response by coordinates:', data);
         this.forecastWeather = data?.list?.filter((entry: any) => entry.dt_txt.includes('12:00:00')).map((entry: any) => ({
