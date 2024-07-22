@@ -20,7 +20,23 @@ export class DefaultWeatherComponent implements OnInit {
   weatherUtils = inject(WeatherUtilsService);
   weatherService = inject(WeatherService);
   defaultWeather: any = null;
-
+  fetchDefault(){
+    this.weatherService.getCurrentWeather(this.defaultLocation).subscribe((data: any) => {
+      console.log('Default weather data received:', data);
+      this.defaultWeather = {
+        ...data,
+        main: {
+          ...data.main,
+          temp: this.weatherUtils.convertTemperature(data.main.temp, this.unit)
+        }
+      };
+      this.displayedLocation = this.defaultLocation;
+      console.log('Default weather:', this.defaultWeather);
+    },
+    (error) => {
+      console.error('There was an error fetching default weather!', error);
+    })
+  }
   fetchDefaultWeatherData(lat: any, lon: any) {
     // const encodedDefaultLocation = encodeURIComponent(this.defaultLocation);
     this.weatherService.getCurrentWeatherByCoordinates(lat, lon).subscribe(
@@ -62,6 +78,7 @@ export class DefaultWeatherComponent implements OnInit {
           this.locationPromptInteracted = true;
           this.userLocation = error.code === error.PERMISSION_DENIED ? 'denied' : null;
           if (error.code === error.PERMISSION_DENIED) {
+            this.fetchDefault();
             console.log('Location access denied by user.');
           } else {
             console.error('Error getting location', error);
