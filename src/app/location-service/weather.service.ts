@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class WeatherService {
-  baseUrl = 'http://localhost:8000/routes.php?request=';
+  baseUrl = 'http://localhost/';
   currentWeather= 'http://localhost/weatherapi/current-weather';
   currentWeatherByCoordinates = 'http://localhost/weatherapi/coordinates';
 
