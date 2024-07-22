@@ -14,7 +14,7 @@ export class DefaultWeatherComponent implements OnInit {
 
   ngOnInit(): void {
     this.promptLocationPermission();
-    // this.fetchDefaultWeatherData();
+    this.fetchDefault();
   }
 
   weatherUtils = inject(WeatherUtilsService);
